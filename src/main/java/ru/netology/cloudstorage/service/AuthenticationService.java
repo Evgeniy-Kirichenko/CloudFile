@@ -21,8 +21,12 @@ public class AuthenticationService {
         final String userPassword = authenticationRQ.getPassword();
         User user = userService.loadUserByUsernameAndPassword(userName, userPassword);
         String token = "2222222";
-        tokenUserRepository.save(new TokenUser(1L,userName,token));
+        tokenUserRepository.save(new TokenUser(1L, userName, token));
         return new AuthenticationRS(token);
+    }
+
+    public void logout(String authToken) {
+        tokenUserRepository.deleteByAuthToken(authToken);
     }
 
 }
