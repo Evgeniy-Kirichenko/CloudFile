@@ -69,7 +69,7 @@ public class CloudFileService {
     }
 
     public List<FileRS> getAllFileUser(String authToken, int limit) {
-        final User user = getUserByAuthToken(authToken);
+       final User user = getUserByAuthToken(authToken);
         if (user == null) throw new UnauthorizedException("Поиск файлов невозможен. Вы не авторизованны");
         return cloudFileRepository.findAllByOwner(user).stream().limit(limit).map(o ->
                 new FileRS(o.getFileName(), o.getSize())).collect(Collectors.toList());
@@ -89,7 +89,7 @@ public class CloudFileService {
     private User getUserByAuthToken(String authToken) {
         String userNameToken = tokenUserRepository.findByAuthToken(authToken).orElse(null).getLogin();
         System.out.println(userNameToken);
-        User user = userRepository.findByLogin(userNameToken).get();
+        User user = userRepository.findByUsername(userNameToken).get();
         System.out.println(user.toString());
         return user;
     }

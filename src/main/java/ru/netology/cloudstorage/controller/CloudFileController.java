@@ -47,11 +47,12 @@ public class CloudFileController {
     @GetMapping("/list")
     public List<FileRS> getAllFile(@RequestHeader("auth-token") String authToken,
                                    @RequestParam("limit") int limit) {
+        System.out.println(authToken);
         return cloudFileService.getAllFileUser(authToken, limit);
     }
 
     @PutMapping("/file")
-    public ResponseEntity<?> editFileName(@RequestHeader("authToken") String authToken,
+    public ResponseEntity<?> editFileName(@RequestHeader("auth-Token") String authToken,
                                           @RequestParam("filename") String fileName,
                                           @RequestBody EditFileNameRQ editFileNameRQ) {
         cloudFileService.editFileName(authToken, fileName, editFileNameRQ);
