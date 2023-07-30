@@ -35,11 +35,4 @@ public class User implements Serializable {
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
    private Collection<Role> roles;
-
-
-
-//    public User(String login, String password) {
-//        this.username = login;
-//        this.password = password;
-//    }
 }

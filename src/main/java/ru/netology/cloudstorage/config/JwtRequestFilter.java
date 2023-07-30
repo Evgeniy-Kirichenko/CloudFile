@@ -27,17 +27,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("auth-token");
-       System.out.println(authHeader);
         String username = null;
         String jwt = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            System.out.println(jwt);
-
             try {
                 username = jwtTokenUtils.getUsername(jwt);
-                System.out.println(username);
             } catch (ExpiredJwtException e) {
                 log.debug("Время жизни токена вышло");
             } catch (SignatureException e) {

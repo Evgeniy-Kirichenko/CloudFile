@@ -7,6 +7,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.cloudstorage.dto.request.EditFileNameRQ;
@@ -22,6 +23,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CloudFileController {
     CloudFileService cloudFileService;
+    AuthenticationManager authenticationManager;
 
     @PostMapping("/file")
     public ResponseEntity<?> uploadFile(@RequestHeader("auth-token") String authToken,
@@ -47,7 +49,8 @@ public class CloudFileController {
     @GetMapping("/list")
     public List<FileRS> getAllFile(@RequestHeader("auth-token") String authToken,
                                    @RequestParam("limit") int limit) {
-        System.out.println(authToken);
+
+        System.out.println("controller"+authToken);
         return cloudFileService.getAllFileUser(authToken, limit);
     }
 

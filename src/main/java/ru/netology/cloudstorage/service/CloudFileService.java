@@ -69,11 +69,12 @@ public class CloudFileService {
     }
 
     public List<FileRS> getAllFileUser(String authToken, int limit) {
-       final User user = getUserByAuthToken(authToken);
+        final User user = getUserByAuthToken(authToken);
         if (user == null) throw new UnauthorizedException("Поиск файлов невозможен. Вы не авторизованны");
         return cloudFileRepository.findAllByOwner(user).stream().limit(limit).map(o ->
                 new FileRS(o.getFileName(), o.getSize())).collect(Collectors.toList());
     }
+
     @Transactional
     public void editFileName(String authToken, String fileName, EditFileNameRQ editFileNameRQ) {
         final User user = getUserByAuthToken(authToken);
@@ -85,13 +86,14 @@ public class CloudFileService {
     }
 
 
-    //ищем в репозитории tokenUserRepository по токену и возвращаем найденого пользователя из репоситория userRepository
+    //ищем в репозитории tokenUserRepository по токену и возвращаем найденого пользователя из репозитория userRepository
     private User getUserByAuthToken(String authToken) {
-        String userNameToken = tokenUserRepository.findByAuthToken(authToken).orElse(null).getLogin();
-        System.out.println(userNameToken);
-        User user = userRepository.findByUsername(userNameToken).get();
-        System.out.println(user.toString());
-        return user;
+        if (authToken.startsWith("Bearer ")) {
+            final String authTokenWithoutBearer = authToken.split(" ")[1];
+            final String username = tokenUserRepository.findByAuthToken(authTokenWithoutBearer).get().getLogin();
+            return userRepository.findByUsername(username).get();
+        }
+        return null;
     }
 
 

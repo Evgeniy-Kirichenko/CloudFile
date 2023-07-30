@@ -2,6 +2,7 @@ package ru.netology.cloudstorage.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,7 +33,7 @@ public class AuthenticationController {
     private final JwtTokenUtils jwtTokenUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRQ authenticationRQ) {
+    public ResponseEntity<?> login(@RequestBody @NotNull AuthenticationRQ authenticationRQ) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRQ.getLogin(), authenticationRQ.getPassword()));
@@ -42,7 +43,7 @@ public class AuthenticationController {
         }
         UserDetails userDetails = userService.loadUserByUsername(authenticationRQ.getLogin());
         String authToken = jwtTokenUtils.generateToken(userDetails);
-        tokenUserRepository.save(new TokenUser(1L, userDetails.getUsername(), authToken));
+        tokenUserRepository.save(new TokenUser(userDetails.getUsername(), authToken));
         return ResponseEntity.ok(new AuthenticationRS(authToken));
 
     }
