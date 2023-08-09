@@ -27,25 +27,12 @@ import ru.netology.cloudstorage.utils.JwtTokenUtils;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final AuthenticationManager authenticationManager;
-    private final UserService userService;
-    private final TokenUserRepository tokenUserRepository;
-    private final JwtTokenUtils jwtTokenUtils;
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @NotNull AuthenticationRQ authenticationRQ) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRQ.getLogin(), authenticationRQ.getPassword()));
-                    } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Некорректный логин или пароль"),
-                    HttpStatus.UNAUTHORIZED);
-        }
-        UserDetails userDetails = userService.loadUserByUsername(authenticationRQ.getLogin());
-        String authToken = jwtTokenUtils.generateToken(userDetails);
-        tokenUserRepository.save(new TokenUser(userDetails.getUsername(), authToken));
-        return ResponseEntity.ok(new AuthenticationRS(authToken));
 
+        return authenticationService.login(authenticationRQ);
     }
 
     @PostMapping("/logout")

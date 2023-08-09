@@ -3,6 +3,7 @@ package ru.netology.cloudstorage.controller;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequestMapping("/")
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class CloudFileController {
     CloudFileService cloudFileService;
     AuthenticationManager authenticationManager;
@@ -35,6 +37,7 @@ public class CloudFileController {
     @DeleteMapping("/file")
     public ResponseEntity<?> deleteFile(@RequestHeader("auth-token") String authToken,
                                         @RequestParam("filename") String fileName) {
+
         cloudFileService.deleteFile(authToken, fileName);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -49,8 +52,6 @@ public class CloudFileController {
     @GetMapping("/list")
     public List<FileRS> getAllFile(@RequestHeader("auth-token") String authToken,
                                    @RequestParam("limit") int limit) {
-
-        System.out.println("controller"+authToken);
         return cloudFileService.getAllFileUser(authToken, limit);
     }
 
