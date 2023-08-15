@@ -25,7 +25,6 @@ import java.util.List;
 
 public class CloudFileController {
     CloudFileService cloudFileService;
-    AuthenticationManager authenticationManager;
 
     @PostMapping("/file")
     public ResponseEntity<?> uploadFile(@RequestHeader("auth-token") String authToken,
